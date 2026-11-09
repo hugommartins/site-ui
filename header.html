@@ -1,0 +1,12 @@
+{% macro header(site_name, root) -%}
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="{{ root }}/" aria-label="{{ site_name }}">
+      <svg viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7"/></svg>
+      <span class="brand-name">{{ site_name }}</span>
+    </a>
+    <div class="nav-slot">{% if caller %}{{ caller() }}{% endif %}</div>
+    <button class="theme" type="button" aria-label="Toggle theme"><span class="dot"></span><span class="theme-label">theme</span><span class="ico"></span></button>
+  </div>
+</header>
+{%- endmacro %}

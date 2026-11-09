@@ -1,0 +1,38 @@
+:root {
+  --paper: #fff;
+  --ink: #3c3836;
+  --mist: #7c6f64;
+  --line: #e2dec9;
+  --panel: color-mix(in srgb, var(--paper) 94%, var(--ink) 6%);
+  --bar: rgba(255, 255, 255, 0.85);
+  --shadow-nav: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --markbg: rgba(250, 189, 47, 0.3);
+  --markfg: #3c3836;
+  --code-bg: #f2f2f0;
+  --code-fg: #3c3836;
+  --pre-bg: #f8f8f7;
+  --pre-border: #e2e2de;
+  --t: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  --nav-h: 56px;
+  --wrap: 1120px;
+  --gutter: 20px;
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-code: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  color-scheme: light;
+}
+:root[data-theme='dark'] {
+  --paper: #1c1a14;
+  --ink: #ebdbb2;
+  --mist: #a89984;
+  --line: #3c3836;
+  --bar: rgba(28, 26, 20, 0.85);
+  --shadow-nav: 0 4px 16px rgba(0, 0, 0, 0.45);
+  --markbg: rgba(250, 189, 47, 0.2);
+  --markfg: #fabd2f;
+  --code-bg: #3c3836;
+  --code-fg: #ebdbb2;
+  --pre-bg: #1d2021;
+  --pre-border: #504945;
+  color-scheme: dark;
+}
