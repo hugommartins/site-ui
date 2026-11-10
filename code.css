@@ -1,0 +1,98 @@
+/* site-ui code.css
+   Inline code, code blocks, <mark>, and Pygments highlighting (Gruvbox).
+   Needs from tokens.css: --font-code, --code-bg, --code-fg, --pre-bg,
+   --pre-border, --pre-shadow, --markbg, --markfg, --t.
+   Syntax colours are fixed Gruvbox values, not brand colours, so every site
+   shows code the same. */
+
+code, pre {
+  font-family: var(--font-code);
+  font-feature-settings: "liga" 1, "calt" 1;
+  transition: var(--t);
+}
+
+code {
+  padding: 0.15em 0.35em;
+  font-size: 0.82em;
+  color: var(--code-fg);
+  background-color: var(--code-bg);
+  border-radius: 4px;
+}
+
+pre {
+  margin: 1.25rem 0;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  background-color: var(--pre-bg);
+  border: 1px solid var(--pre-border);
+  border-radius: 6px;
+  box-shadow: var(--pre-shadow);
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  background: transparent;
+}
+
+mark {
+  padding: 0.1em 0.3em;
+  color: var(--markfg);
+  background: var(--markbg);
+  border-radius: 4px;
+}
+
+/* ---- Pygments: one set of colour variables per theme, one set of rules ---- */
+.highlight {
+  --hl-line: #e8e8e8;
+  --hl-comment: #928374;
+  --hl-keyword: #9d0006;   /* keywords and operators */
+  --hl-string: #799d00;
+  --hl-number: #8f3f71;
+  --hl-function: #076678;
+  --hl-class: #b57614;     /* classes, namespaces, tags */
+  --hl-name: #af3a03;      /* attributes, builtins, variables, constants */
+  --hl-pseudo: #427b58;    /* builtin pseudo (self, cls) */
+}
+:root[data-theme='dark'] .highlight {
+  --hl-line: #504945;
+  --hl-comment: #928374;
+  --hl-keyword: #fb4934;
+  --hl-string: #b8bb26;
+  --hl-number: #d3869b;
+  --hl-function: #83a598;
+  --hl-class: #fabd2f;
+  --hl-name: #fe8019;
+  --hl-pseudo: #8ec07c;
+}
+
+.highlight span { transition: var(--t); }
+
+.highlight .hll { background-color: var(--hl-line); }
+
+.highlight .c, .highlight .ch, .highlight .cm, .highlight .c1, .highlight .cs {
+  color: var(--hl-comment); font-style: italic;
+}
+.highlight .k, .highlight .kc, .highlight .kd, .highlight .kn, .highlight .kp,
+.highlight .kr, .highlight .kt, .highlight .o, .highlight .ow {
+  color: var(--hl-keyword); font-weight: 500;
+}
+.highlight .s, .highlight .sa, .highlight .sb, .highlight .sc, .highlight .dl,
+.highlight .sd, .highlight .s2, .highlight .se, .highlight .sh, .highlight .si,
+.highlight .sx, .highlight .s1, .highlight .ss {
+  color: var(--hl-string);
+}
+.highlight .m, .highlight .mb, .highlight .mf, .highlight .mh, .highlight .mi,
+.highlight .il, .highlight .mo {
+  color: var(--hl-number);
+}
+.highlight .nf, .highlight .fm { color: var(--hl-function); }
+.highlight .nc, .highlight .nn, .highlight .nt { color: var(--hl-class); font-weight: 500; }
+.highlight .na, .highlight .nb, .highlight .no, .highlight .nd, .highlight .ni,
+.highlight .ne, .highlight .nl, .highlight .nv, .highlight .vc, .highlight .vg,
+.highlight .vi, .highlight .vm {
+  color: var(--hl-name);
+}
+.highlight .bp { color: var(--hl-pseudo); }
