@@ -96,6 +96,10 @@ a.ext::after { content: ''; position: absolute; right: 0; top: 50%; width: 10px;
 .ftab span { flex: 1; overflow: hidden; text-overflow: ellipsis; }
 .ftab i { flex: none; font-style: normal; opacity: .55; line-height: 1; }
 .fsizes { display: flex; align-items: center; gap: 12px; padding-bottom: 10px; }
+.ibar { display: flex; align-items: center; min-height: 56px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--line); }
+.ibar[data-t='light'] { background: #fff; --line: #e2dec9; }
+.ibar[data-t='dark'] { background: #1c1a14; --line: #3c3836; }
+.ibar svg { display: block; width: 28px; height: 28px; }
 .ftool { height: 22px; background: var(--tab); }
 @media (max-width: 560px) {
   .ftable { grid-template-columns: 1fr 1fr; }
@@ -137,7 +141,7 @@ th { color: var(--mist); font-weight: 600; }
 <header class="nav">
   <div class="nav-inner">
     <a class="brand" href="#" id="brand" aria-label="open-yard home">
-      <svg viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7"/></svg>
+      <svg id="brand-icon" viewBox="0 0 32 32" aria-hidden="true"></svg>
       <span class="brand-name" id="brand-name">open-yard</span>
     </a>
     <div class="nav-slot">
@@ -234,10 +238,14 @@ th { color: var(--mist); font-weight: 600; }
     <span class="k">return</span> template.render(title=note.title, n=<span class="m">42</span>, kind=<span class="s">"book"</span>)</code></pre>
 
   <h2>Favicons</h2>
-  <p>Two things per site. The favicon in the browser tab is one file in the site's light accent, the same in a light and a dark browser (shown at 16px in the tab and 32px beside it). The icon in the header at 560px and below keeps both colours: it follows the site's own toggle, so it is the light accent in the light theme and the dark accent in the dark theme (right, at the same size). The tab of this page shows the current site.</p>
+  <p>The icon in the browser tab. One file per site, in the site's light accent with a white glyph, so it looks the same in a light and in a dark browser. A favicon cannot read the page's CSS, so it has no dark variant.</p>
   <div class="ftable" id="fav-grid"></div>
-  <p style="margin-top:1.2rem">The file each site ships as <code>favicon.svg</code> (shown for the current site). It has no dark variant. The header icon can change colour because it reads the page's CSS; a favicon cannot.</p>
+  <p style="margin-top:1.2rem">Each site ships it as a single-colour SVG (<code>favicon.svg</code>, or a data-URI <code>&lt;link rel="icon"&gt;</code>). Shown for the current site:</p>
 <pre class="highlight"><code id="fav-src"></code></pre>
+
+  <h2>Mobile header icon</h2>
+  <p>The icon in the header at 560px and below. It is the same drawing as the favicon, but it reads the page's CSS, so it follows the site's own toggle: the light accent in the light theme and the dark accent in the dark theme, with the glyph in the paper colour.</p>
+  <div class="ftable" id="icon-grid"></div>
 
   <h2>Contrast (computed live for the current accent and theme)</h2>
   <table id="ct"><thead><tr><th>pair</th><th>ratio</th><th>needs</th><th></th></tr></thead><tbody></tbody></table>
@@ -281,6 +289,7 @@ th { color: var(--mist); font-weight: 600; }
   function setAccent(a) {
     closeDrawer();
     document.getElementById('brand-name').textContent = NAMES[a];
+    setBrandIcon(a);
     document.getElementById('brand').setAttribute('aria-label', NAMES[a] + ' home');
     root.setAttribute('data-accent', a);
     document.querySelectorAll('[data-for]').forEach(function (k) { k.hidden = k.dataset.for.split(' ').indexOf(a) < 0; });
@@ -289,7 +298,26 @@ th { color: var(--mist); font-weight: 600; }
   }
   document.querySelectorAll('[data-set]').forEach(function (b) { b.addEventListener('click', function () { setAccent(b.dataset.set); }); });
   function hex(c) { return '#' + c.c.map(function (x) { return ('0' + Math.round(x).toString(16)).slice(-2); }).join(''); }
-  function uri(fill) { return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><rect width="28" height="28" rx="7" fill="' + fill + '"/></svg>'); }
+  // the real glyphs: viewBox, corner radius, stroke width, and the drawing. STROKE is filled in.
+  var GLYPH = {
+    green: { vb: 32, rx: 6, sw: 2, g: "<path d='M14 18C14 11 19 6 26 6C26 13 21 18 14 18Z'/><path d='M14 18C14 14 11 11 6 11C6 15 9 18 14 18Z'/><path d='M14 18V26'/>" },
+    navy: { vb: 32, rx: 6, sw: 1.5, g: "<path d='M 8 16 V 12 A 8 8 0 0 1 24 12 V 16'/><line x1='8' y1='16' x2='8' y2='25'/><line x1='24' y1='16' x2='24' y2='25'/><line x1='5' y1='25' x2='27' y2='25'/>" },
+    ochre: { vb: 64, rx: 14, sw: 3.6, g: "<path d='M12 46C14 30 24 16 33 24 41 31 27 43 33 49 40 55 51 36 52 17'/>" }
+  };
+  function glyph(a, stroke) {
+    var d = GLYPH[a];
+    return "<g fill='none' stroke='" + stroke + "' stroke-width='" + d.sw + "' stroke-linecap='round' stroke-linejoin='round'>" + d.g + '</g>';
+  }
+  function iconSvg(a, fill, stroke) {
+    var d = GLYPH[a];
+    return "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 " + d.vb + ' ' + d.vb + "'><rect width='" + d.vb + "' height='" + d.vb + "' rx='" + d.rx + "' fill='" + fill + "'/>" + glyph(a, stroke) + '</svg>';
+  }
+  function uri(a, fill, stroke) { return 'data:image/svg+xml,' + encodeURIComponent(iconSvg(a, fill, stroke)); }
+  function setBrandIcon(a) {
+    var d = GLYPH[a], svg = document.getElementById('brand-icon');
+    svg.setAttribute('viewBox', '0 0 ' + d.vb + ' ' + d.vb);
+    svg.innerHTML = "<rect width='" + d.vb + "' height='" + d.vb + "' rx='" + d.rx + "'/>" + glyph(a, 'currentColor');
+  }
   function brandFor(a, t) {
     var oa = root.getAttribute('data-accent'), ot = root.getAttribute('data-theme');
     root.setAttribute('data-accent', a); root.setAttribute('data-theme', t);
@@ -299,21 +327,25 @@ th { color: var(--mist); font-weight: 600; }
   }
   function favicon() {
     var a = root.getAttribute('data-accent'), l = brandFor(a, 'light');
-    document.getElementById('fav').setAttribute('href', uri(l));
-    document.getElementById('fav-src').textContent = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">\n  <rect width="28" height="28" rx="7" fill="' + l + '"/>\n</svg>';
+    document.getElementById('fav').setAttribute('href', uri(a, l, '#ffffff'));
+    document.getElementById('fav-src').textContent = iconSvg(a, l, '#ffffff').replace(/'/g, '"').replace(/></g, '>\n  <').replace('<svg', '<svg').replace(/^(<svg[^>]*>)\n  /, '$1\n  ').replace(/\n  (<\/svg>)$/, '\n$1');
   }
   function favCards() {
-    var out = '<div class="fhead sp"></div><div class="fhead">Light: tab, then mobile header icon</div><div class="fhead">Dark: tab, then mobile header icon</div>';
+    var out = '<div class="fhead sp"></div><div class="fhead">Light browser</div><div class="fhead">Dark browser</div>';
+    var icons = '<div class="fhead sp"></div><div class="fhead">Light theme</div><div class="fhead">Dark theme</div>';
     ['green', 'navy', 'ochre'].forEach(function (a) {
       var hl = brandFor(a, 'light'), hd = brandFor(a, 'dark');
-      out += '<div class="frow-label"><b>' + NAMES[a] + '</b><span>tab ' + hl + '</span><span>icon ' + hl + ' · ' + hd + '</span></div>';
-      [['light', hl], ['dark', hd]].forEach(function (p) {
-        var tab = uri(hl), icon = uri(p[1]);
+      var tab = uri(a, hl, '#ffffff');
+      out += '<div class="frow-label"><b>' + NAMES[a] + '</b><span>' + hl + '</span></div>';
+      icons += '<div class="frow-label"><b>' + NAMES[a] + '</b><span>' + hl + ' · ' + hd + '</span></div>';
+      [['light', hl, '#ffffff'], ['dark', hd, '#1c1a14']].forEach(function (p) {
         out += '<div class="fcell" data-t="' + p[0] + '"><div class="ftop"><div class="ftab"><img src="' + tab + '" width="16" height="16" alt=""><span>' + NAMES[a] + '</span><i>\u00d7</i></div>' +
-          '<div class="fsizes"><img src="' + tab + '" width="32" height="32" alt=""><img src="' + icon + '" width="32" height="32" alt=""></div></div><div class="ftool"></div></div>';
+          '<div class="fsizes"><img src="' + tab + '" width="32" height="32" alt=""></div></div><div class="ftool"></div></div>';
+        icons += '<div class="ibar" data-t="' + p[0] + '"><img src="' + uri(a, p[1], p[2]) + '" width="28" height="28" alt=""></div>';
       });
     });
     document.getElementById('fav-grid').innerHTML = out;
+    document.getElementById('icon-grid').innerHTML = icons;
   }
   setAccent(root.getAttribute('data-accent'));
   favCards();
