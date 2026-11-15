@@ -1,3 +1,8 @@
+/* site-ui tokens.css
+   Neutral colours, sizes and font stacks shared by every site.
+   Never defines --brand, --brand-tint, --brand-text or --brand-hover: each site
+   defines those in its own style.css, for both themes. */
+
 :root {
   --paper: #fff;
   --ink: #3c3836;
@@ -6,21 +11,43 @@
   --panel: color-mix(in srgb, var(--paper) 94%, var(--ink) 6%);
   --bar: rgba(255, 255, 255, 0.85);
   --shadow-nav: 0 4px 12px rgba(0, 0, 0, 0.08);
+
   --markbg: rgba(250, 189, 47, 0.3);
   --markfg: #3c3836;
+
   --code-bg: #f2f2f0;
   --code-fg: #3c3836;
   --pre-bg: #f8f8f7;
   --pre-border: #e2e2de;
+  --pre-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+
   --t: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+
   --nav-h: 56px;
   --wrap: 1120px;
   --gutter: 20px;
+  --nav-gutter: 24px; /* side padding of the header bar; 16px at 560px and below. Same on every site. */
+
+  /* Type scale: the same roles look the same on every site. Sizes are rem, so they follow the
+     browser's font-size setting. Inconsolata is scaled up 15% in fonts.css, so these are
+     smaller than they look. Display sizes (a hero, a page title) stay in the site. */
+  --fs-body: 1.05rem;   /* reading text, descriptions */
+  --lh-body: 1.65;
+  --fw-body: 350;       /* Inconsolata is variable (200 to 900); 350 reads lighter than 400 */
+  --fs-small: 0.85rem;  /* meta, captions, notes, footers, table cells */
+  --lh-small: 1.5;
+  --fs-ui: 0.8rem;      /* pills, tabs, buttons, tags, the toggle */
+  --fs-tiny: 0.75rem;   /* counts, axis labels, badges */
+  /* headings in prose (serif), h1 to h6 */
+  --fs-h1: 2.1rem; --fs-h2: 1.8rem; --fs-h3: 1.5rem; --fs-h4: 1.3rem; --fs-h5: 1.15rem; --fs-h6: 1.05rem;
+
   --font-serif: 'Fraunces', Georgia, serif;
-  --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-mono: 'Inconsolata', ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-code: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
   color-scheme: light;
 }
+
 :root[data-theme='dark'] {
   --paper: #1c1a14;
   --ink: #ebdbb2;
@@ -28,11 +55,15 @@
   --line: #3c3836;
   --bar: rgba(28, 26, 20, 0.85);
   --shadow-nav: 0 4px 16px rgba(0, 0, 0, 0.45);
+
   --markbg: rgba(250, 189, 47, 0.2);
   --markfg: #fabd2f;
+
   --code-bg: #3c3836;
   --code-fg: #ebdbb2;
   --pre-bg: #1d2021;
   --pre-border: #504945;
+  --pre-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
   color-scheme: dark;
 }

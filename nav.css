@@ -1,0 +1,146 @@
+/* site-ui nav.css
+   The bar, wordmark, icon-only brand on mobile, and the theme toggle.
+   Needs --brand, --brand-text from the site. Anything between the brand and the
+   toggle goes in .nav-slot and is styled by the site, not here.
+   Layout: above 860px the slot is the middle of three columns, so its content is
+   centred in the bar whatever the widths of the brand and toggle. At 860px and
+   below the slot takes the space between them. The slot's width above 860px can be
+   changed with --nav-slot-w (default 420px). */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  min-height: var(--nav-h);
+  background: var(--bar);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-nav);
+  transition: var(--t);
+}
+
+.nav-inner {
+  max-width: var(--wrap);
+  min-height: var(--nav-h);
+  margin: 0 auto;
+  /* the bar's own side padding, not the site's --gutter: the brand and the toggle sit in the
+     same place on every site whatever the page's gutter is */
+  padding: 0 max(var(--nav-gutter), env(safe-area-inset-right)) 0 max(var(--nav-gutter), env(safe-area-inset-left));
+  display: grid;
+  grid-template-columns: 1fr minmax(0, var(--nav-slot-w, 420px)) 1fr;
+  align-items: center;
+  column-gap: 1rem;
+}
+
+/* the middle column; children are laid out by the site (search fills it, menu button is positioned) */
+.nav-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+@media (max-width: 860px) {
+  .nav-inner { grid-template-columns: auto minmax(0, 1fr) auto; }
+}
+@media (max-width: 560px) {
+  .nav-inner { --nav-gutter: 16px; }
+}
+
+/* ---- brand ---- */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+  justify-self: start;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+.brand:hover,
+.brand:focus-visible { opacity: 0.7; }
+
+.brand-name {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--brand-text);
+}
+
+/* The icon replaces the name below 560px. Sites may pass their own glyph:
+   draw the background as a <rect> and the glyph with stroke/fill="currentColor". */
+.brand svg { display: none; width: 28px; height: 28px; color: var(--paper); }
+.brand svg rect { fill: var(--brand); }
+
+@media (max-width: 560px) {
+  .brand-name { display: none; }
+  .brand svg { display: block; }
+}
+
+/* ---- theme toggle ---- */
+.theme {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: none;
+  min-width: 82px; /* "light" and "dark" take the same width, so the bar does not shift */
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--mist);
+  transition: var(--t);
+}
+/* hover only where a pointer can hover: on touch the :hover state sticks after a tap, and the
+   toggle would stay in the accent colour until the next tap elsewhere */
+@media (hover: hover) {
+  .theme:hover { color: var(--brand-text); border-color: var(--brand); }
+}
+.theme:focus-visible,
+.theme:active { color: var(--brand-text); border-color: var(--brand); }
+
+/* the label shows the current mode; the accessible name is the button's aria-label */
+.theme-label::before { content: 'light'; }
+:root[data-theme='dark'] .theme-label::before { content: 'dark'; }
+
+.theme .dot {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--brand);
+}
+
+/* mobile: compact circle with a sun/moon outline icon, no label */
+.theme .ico { display: none; }
+.theme {
+  --moon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z'/%3E%3C/svg%3E");
+  --sun: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/%3E%3C/svg%3E");
+}
+
+@media (max-width: 560px) {
+  .nav-inner { column-gap: 0.6rem; }
+  .theme { width: 34px; min-width: 0; height: 34px; padding: 0; }
+  .theme .theme-label,
+  .theme .dot { display: none; }
+  .theme .ico {
+    display: block;
+    width: 16px;
+    height: 16px;
+    background: currentColor;
+    -webkit-mask: var(--moon) center / contain no-repeat;
+    mask: var(--moon) center / contain no-repeat;
+  }
+  :root[data-theme='dark'] .theme .ico {
+    -webkit-mask-image: var(--sun);
+    mask-image: var(--sun);
+  }
+}

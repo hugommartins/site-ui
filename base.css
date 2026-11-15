@@ -1,7 +1,6 @@
 /* site-ui base.css
    Resets and behaviour every page needs. Load after tokens.css.
-   Deliberately not here: body font-family and font-size (they differ per site),
-   layout, and anything that uses --brand to define a component. */
+   Deliberately not here: layout, and anything that uses --brand to define a component. */
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -14,6 +13,9 @@ html {
 
 body {
   margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
   color: var(--ink);
   background: var(--paper);
   transition: var(--t);
@@ -42,4 +44,12 @@ button { font: inherit; color: inherit; }
     transition: none !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* set by theme.js for the instant of a light/dark switch, so the theme changes with no fade */
+html.theme-switching,
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition: none !important;
 }

@@ -1,12 +1,24 @@
-{% macro header(site_name, root) -%}
+{#- site-ui header (Jinja). The same markup lives in studio's Nav.astro: keep them identical.
+
+    {% from "header.html" import header %}
+    {% call header(site_title, root) %}  ...what sits between the brand and the toggle...  {% endcall %}
+
+    root is the relative path to the site root with a trailing slash ("" , "../", "../../").
+    icon (optional) is a site's own <svg> for the mobile icon. Draw the background as a <rect>
+    and the glyph with currentColor, so nav.css can colour both. -#}
+{% macro header(site_name, root, icon=none) -%}
 <header class="nav">
   <div class="nav-inner">
-    <a class="brand" href="{{ root }}/" aria-label="{{ site_name }}">
+    <a class="brand" href="{{ root or './' }}" aria-label="{{ site_name }} home">
+      {%- if icon %}
+      {{ icon|safe }}
+      {%- else %}
       <svg viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7"/></svg>
+      {%- endif %}
       <span class="brand-name">{{ site_name }}</span>
     </a>
     <div class="nav-slot">{% if caller %}{{ caller() }}{% endif %}</div>
-    <button class="theme" type="button" aria-label="Toggle theme"><span class="dot"></span><span class="theme-label">theme</span><span class="ico"></span></button>
+    <button class="theme" type="button" aria-label="Toggle theme"><span class="dot"></span><span class="theme-label"></span><span class="ico"></span></button>
   </div>
 </header>
 {%- endmacro %}
