@@ -96,7 +96,7 @@ run the L6 and L2 commands before the build.
 ## GitHub Pages
 
 Serve the repo root from `main` (Settings, Pages). The demo is then at
-`https://<owner>.github.io/site-ui/demo.html`, and it is the file the browser tests run.
+`https://hugommartins.github.io/site-ui/demo.html`, and it is the file the browser tests run.
 
 ## Troubleshooting
 

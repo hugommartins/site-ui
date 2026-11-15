@@ -27,7 +27,7 @@ with `position: absolute`, set `position: relative` on `.nav-inner`.
 Add as a submodule, pinned to a tag:
 
 ```
-git submodule add https://github.com/<owner>/site-ui vendor/site-ui
+git submodule add https://github.com/hugommartins/site-ui vendor/site-ui
 git -C vendor/site-ui checkout v0.1.0
 git add .gitmodules vendor/site-ui && git commit -m "Add site-ui v0.1.0"
 ```
