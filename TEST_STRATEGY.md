@@ -43,7 +43,7 @@ Likelihood and impact are my own judgement for three personal sites with one mai
 | **L1 Static, package** | Every `var(--x)` in the package resolves; no `--brand*` is defined; every `font-family` token has an `@font-face`; every `url()` in `fonts.css` points at an existing file | Python, standard library | package CI | ms |
 | **L2 Site contract** | The site's `style.css` defines all four brand tokens in both themes; every `var()` in the built CSS resolves | Python, standard library | each site's build | ms |
 | **L3 Contrast** | `--brand-text` 4.5:1 on paper and on the tint over paper; `--brand` 3:1 on paper; paper on `--brand-hover` 4.5:1; light and dark, per site | Python, standard library | package CI (all three accents), each site's build (its own) | ms |
-| **L4 Browser** | On `demo.html`, per site, at 1000, 700, 390 and 320px: no horizontal overflow; name above 560px and icon below; toggle flips, persists and is set before first paint; accessible names (axe); garden drawer opens, closes and closes on Esc; bookshelf search visible at every width | Playwright, pytest | package CI | seconds |
+| **L4 Browser** | On `demo.html`, per site, at 1000, 700, 390 and 320px: no horizontal overflow; name above 560px and icon below; toggle flips, persists and is set before first paint; brand, toggle and bar height are identical on all three sites; accessible names (axe); garden drawer opens, closes and closes on Esc; bookshelf search visible at every width | Playwright, pytest | package CI | seconds |
 | **L5 Markup drift** | The `header.html` macro and `Nav.astro` produce the same normalised markup | Python plus Jinja | studio CI | ms |
 | **L6 Repo hygiene** | `vendor/site-ui/tokens.css` exists before the build runs; the pointer is on a tag (`git describe --exact-match --tags`) | shell or Python | each site's build and CI | ms |
 
@@ -73,7 +73,7 @@ Likelihood and impact are my own judgement for three personal sites with one mai
   font looks is judged by eye in the demo.
 - **Per-site pages and e2e.** Each site tests its own content. This repo tests the package and
   the contract a site must meet.
-- **The favicon.** It is a static file per site; `demo.html` shows all six variants.
+- **The favicon.** It is a static file per site, with one variant; `demo.html` shows all three.
 
 ## Order of work
 
