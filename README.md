@@ -4,7 +4,7 @@ The shared look behind three personal sites: **studio**, **garden** and **booksh
 Neutral colours, fonts, the header and code styling live here once; each site adds its
 own accent and layout. Plain CSS and one small JS file, no build step.
 
-**[Live demo](https://hugommartins.github.io/site-ui/demo.html)**: the three sites side by
+**[Live demo](https://hugommartins.github.io/site-ui/)**: the three sites side by
 side, light and dark, the header at phone width, favicons, and a live contrast check.
 
 ## Why it exists
