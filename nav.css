@@ -57,7 +57,9 @@
   text-decoration: none;
   transition: opacity 0.15s ease;
 }
-.brand:hover,
+@media (hover: hover) {
+  .brand:hover { opacity: 0.7; }
+}
 .brand:focus-visible { opacity: 0.7; }
 
 .brand-name {
