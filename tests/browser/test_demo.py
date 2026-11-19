@@ -191,3 +191,18 @@ def test_toggle_takes_the_accent_on_hover(open_demo, site):
     page.hover('.nav .theme')
     page.wait_for_timeout(400)
     assert _toggle_colors(page) != _neutral_colors(page), 'no hover colour on a device that can hover'
+
+
+@pytest.mark.parametrize('site', SITES)
+def test_toggle_dot_does_not_move_between_themes(open_demo, site):
+    """'light' and 'dark' differ in length; the dot and the button must stay where they are."""
+    page = open_demo(site, 1000, theme='light')
+    box = lambda: page.evaluate("""() => {
+        const b = document.querySelector('.theme').getBoundingClientRect();
+        const d = document.querySelector('.theme .dot').getBoundingClientRect();
+        return [b.left, b.width, d.left];
+    }""")
+    light = box()
+    page.click('.theme')
+    assert page.evaluate("document.documentElement.dataset.theme") == 'dark'
+    assert box() == pytest.approx(light, abs=0.5)

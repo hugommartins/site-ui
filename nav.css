@@ -109,7 +109,9 @@
 .theme:focus-visible,
 .theme:active { color: var(--brand-text); border-color: var(--brand); }
 
-/* the label shows the current mode; the accessible name is the button's aria-label */
+/* the label shows the current mode; the accessible name is the button's aria-label.
+   Fixed width (the longer word, monospace) so the dot does not move when it changes. */
+.theme-label { display: inline-block; min-width: 5ch; text-align: left; }
 .theme-label::before { content: 'light'; }
 :root[data-theme='dark'] .theme-label::before { content: 'dark'; }
 
